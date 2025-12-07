@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:spensr/screen/authentication/view/forget_password_page.dart';
 import 'package:spensr/theme/app_colors.dart';
+import 'package:spensr/screen/home/view/homeview.dart';  // Import HomeView
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -55,7 +57,6 @@ class _LoginViewState extends State<LoginView> {
                       "Get Started!",
                       style: TextStyle(
                         fontSize: 16,
-                        // ignore: deprecated_member_use
                         color: Colors.white.withOpacity(0.9),
                       ),
                     )
@@ -69,8 +70,7 @@ class _LoginViewState extends State<LoginView> {
               Container(
                 width: double.infinity,
                 transform: Matrix4.translationValues(0, -25, 0),
-margin: const EdgeInsets.symmetric(horizontal: 16),
-
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 padding: const EdgeInsets.all(22),
                 decoration: BoxDecoration(
                   color: Colors.black87,
@@ -107,57 +107,70 @@ margin: const EdgeInsets.symmetric(horizontal: 16),
 
                     // Confirm Password
                     if (!isLogin) ...[
-                      inputField("Confirm Password", confirmController, colors,
-                          obscure: true),
+                      inputField("Confirm Password", confirmController, colors, obscure: true),
                       const SizedBox(height: 16),
                     ],
-                    if (isLogin) 
-// Remember me + Forgot Password (same line)
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    // LEFT SIDE — Remember Me
-    Row(
-      children: [
-        Checkbox(
-          value: isRememberMe,
-          activeColor: colors.primary,
-          onChanged: (v) => setState(() => isRememberMe = v ?? false),
-        ),
-        const Text(
-          "Remember Me",
-          style: TextStyle(color: Colors.white70, fontSize: 13),
-        ),
-      ],
-    ),
 
-    // RIGHT SIDE — Forgot Password
-    if (isLogin)
-      GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ForgotPasswordPage()),
-          );
-        },
-        child: Text(
-          "Forgot Password?",
-          style: TextStyle(
-            color: colors.primary,
-            fontWeight: FontWeight.bold,
-            fontSize: 13,
-          ),
-        ),
-      ),
-  ],
-),
+                    if (isLogin)
+                      // Remember me + Forgot Password (same line)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // LEFT SIDE — Remember Me
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: isRememberMe,
+                                activeColor: colors.primary,
+                                onChanged: (v) => setState(() => isRememberMe = v ?? false),
+                              ),
+                              const Text(
+                                "Remember Me",
+                                style: TextStyle(color: Colors.white70, fontSize: 13),
+                              ),
+                            ],
+                          ),
 
+                          // RIGHT SIDE — Forgot Password
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const ForgotPasswordPage()),
+                              );
+                            },
+                            child: Text(
+                              "Forgot Password?",
+                              style: TextStyle(
+                                color: colors.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
 
                     const SizedBox(height: 14),
 
                     // SIGNUP / LOGIN BUTTON
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        // Perform login logic here, e.g., Firebase authentication
+                        bool loginSuccessful = await _loginWithFirebase();
+                        if (loginSuccessful) {
+                          // Navigate to HomeView after successful login
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomeView()),
+                          );
+                        } else {
+                          // Handle login failure, e.g., show an error message
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Login failed!")),
+                          );
+                        }
+                      },
                       child: Container(
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 14),
@@ -186,8 +199,7 @@ Row(
                         Expanded(child: Divider(color: Colors.white24)),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 8),
-                          child: Text("Or Signup with",
-                              style: TextStyle(color: Colors.white54)),
+                          child: Text("Or Signup with", style: TextStyle(color: Colors.white54)),
                         ),
                         Expanded(child: Divider(color: Colors.white24)),
                       ],
@@ -218,8 +230,7 @@ Row(
                               isLogin
                                   ? "Don’t have an account?"
                                   : "Already have an account?",
-                              style:
-                                  const TextStyle(color: Colors.white70, fontSize: 14),
+                              style: const TextStyle(color: Colors.white70, fontSize: 14),
                             ),
                             const SizedBox(width: 6),
                             Text(
@@ -286,5 +297,12 @@ Row(
       ),
       child: Icon(icon, color: Colors.white, size: 30),
     );
+  }
+
+  // Simulate login using Firebase (you can replace this with actual login logic)
+  Future<bool> _loginWithFirebase() async {
+    // Replace this with your Firebase authentication logic
+    await Future.delayed(Duration(seconds: 2));
+    return true;  // Simulate successful login
   }
 }

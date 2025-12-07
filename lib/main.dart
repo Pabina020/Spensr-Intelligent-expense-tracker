@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:spensr/screen/home/View/homeview.dart';
+import 'package:spensr/screen/home/view/daily_view.dart';
+import 'package:spensr/screen/home/view/weekly_view.dart';
 import 'package:spensr/theme/app_theme_manager.dart';
-import 'package:spensr/screen/authentication/view/login_page.dart';
+// import 'package:spensr/screen/authentication/view/login_page.dart';
 
 void main() {
   runApp(
@@ -22,7 +25,7 @@ class SpensrApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeManager.theme,      // uses your AppTheme.dark/light
-      home: const LoginView(),        // launches your login page
+      home: WeeklyView()     // launches your login page
     );
   }
 }
