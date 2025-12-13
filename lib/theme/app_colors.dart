@@ -63,6 +63,9 @@ class AppColors {
     required this.disabled,
   });
 
+  get cardBackground => null;
+
+
   /// ------------------------------
   /// STATIC DARK THEME COLORS
   /// ------------------------------

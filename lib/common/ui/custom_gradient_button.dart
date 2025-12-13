@@ -1,202 +1,170 @@
-// import 'package:flutter/material.dart';
-// import 'package:spendigo/common/ui/custom_loader.dart';
-// import 'package:spendigo/theme/app_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:spensr/common/ui/custom_loader.dart';
+import 'package:spensr/theme/app_colors.dart';
 
-// /// ----------------------------------------------------------
-// /// PRIMARY GRADIENT BUTTON (Fintech + AI Glow)
-// /// ----------------------------------------------------------
-// class CustomGradientButton extends StatelessWidget {
-//   final Function()? onPressed;
-//   final double borderRadius;
-//   final bool busy;
-//   final String? buttonLabel;
-//   final Color disabledColor;
+class CustomGradientButton extends StatelessWidget {
+  final Function()? onPressed;
+  final double borderRadius;
+  final Color? color;
+  final bool busy;
+  final String? buttonLabel;
+  final Color disabledColor;
 
-//   const CustomGradientButton({
-//     super.key,
-//     this.onPressed,
-//     this.borderRadius = 14.0,
-//     this.busy = false,
-//     required this.buttonLabel,
-//     this.disabledColor = const Color(0xFF1A1D21),
-//   });
+  const CustomGradientButton({
+    super.key,
+    this.onPressed,
+    this.borderRadius = 12.0,
+    this.color,
+    this.busy = false,
+    required this.buttonLabel,
+    this.disabledColor = const Color(0xFF212121),
+  });
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final bool isEnabled = onPressed != null && !busy;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        decoration: BoxDecoration(
+          color: onPressed == null ? disabledColor : null,
+          gradient:
+              onPressed != null
+                  ? const LinearGradient(
+                    colors: [
+                      Color(0xFF20B9F0),
+                      Color(0xFF0094FF),
+                      Color(0xFF97A1FC),
+                    ],
+                    stops: [0.0, 0.51, 1.0],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  )
+                  : null,
+          borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        child:
+            busy
+                ? CustomLoader.minimal()
+                : Text(
+                  buttonLabel ?? "",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    color:
+                        onPressed == null
+                            ? Colors.white30
+                            : (AppColors.of(context).primaryText),
+                  ),
+                ),
+      ),
+    );
+  }
+}
 
-//     return InkWell(
-//       onTap: isEnabled ? onPressed : null,
-//       borderRadius: BorderRadius.circular(borderRadius),
-//       splashColor: Colors.white.withOpacity(.05),
-//       child: AnimatedContainer(
-//         duration: const Duration(milliseconds: 200),
-//         curve: Curves.easeOut,
-//         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-//         decoration: BoxDecoration(
-//           borderRadius: BorderRadius.circular(borderRadius),
-//           gradient: isEnabled
-//               ? const LinearGradient(
-//                   colors: [
-//                     Color(0xFF6366F1), // Indigo
-//                     Color(0xFF4F46E5),
-//                     Color(0xFF0EA5E9), // Cyan glow
-//                   ],
-//                   begin: Alignment.centerLeft,
-//                   end: Alignment.centerRight,
-//                 )
-//               : null,
-//           color: isEnabled ? null : disabledColor,
-//           boxShadow: isEnabled
-//               ? [
-//                   BoxShadow(
-//                     color: const Color(0xFF6366F1).withOpacity(.35),
-//                     blurRadius: 12,
-//                     offset: const Offset(0, 4),
-//                   )
-//                 ]
-//               : [],
-//         ),
-//         child: Center(
-//           child: busy
-//               ? CustomLoader.minimal()
-//               : Text(
-//                   buttonLabel ?? "",
-//                   style: TextStyle(
-//                     fontWeight: FontWeight.w700,
-//                     fontSize: 15,
-//                     color: isEnabled
-//                         ? Colors.white
-//                         : Colors.white.withOpacity(.3),
-//                   ),
-//                 ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+class CustomOutlinedButton extends StatelessWidget {
+  final Function()? onPressed;
+  final double borderRadius;
+  final Color? color;
+  final bool busy;
+  final String? buttonLabel;
+  final Color disabledColor;
 
-// /// ----------------------------------------------------------
-// /// OUTLINED BUTTON (Clean, Minimal, Fintech Style)
-// /// ----------------------------------------------------------
-// class CustomOutlinedButton extends StatelessWidget {
-//   final Function()? onPressed;
-//   final double borderRadius;
-//   final bool busy;
-//   final String? buttonLabel;
-//   final Color disabledColor;
+  const CustomOutlinedButton({
+    super.key,
+    this.onPressed,
+    this.borderRadius = 12.0,
+    this.color,
+    this.busy = false,
+    required this.buttonLabel,
+    this.disabledColor = const Color(0xFF212121),
+  });
 
-//   const CustomOutlinedButton({
-//     super.key,
-//     this.onPressed,
-//     this.borderRadius = 14.0,
-//     this.busy = false,
-//     required this.buttonLabel,
-//     this.disabledColor = const Color(0xFF1A1D21),
-//   });
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        decoration: BoxDecoration(
+          color: onPressed == null ? disabledColor : null,
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final bool isEnabled = onPressed != null && !busy;
+          borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+          border: Border.all(
+            color: onPressed == null ? disabledColor : Color(0xFF97A1FC),
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 11),
+        child:
+            busy
+                ? Center(child: CustomLoader.minimal())
+                : Center(
+                  child: Text(
+                    buttonLabel ?? "",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color:
+                          onPressed == null
+                              ? Colors.white30
+                              : (AppColors.of(context).primaryText),
+                    ),
+                  ),
+                ),
+      ),
+    );
+  }
+}
 
-//     return InkWell(
-//       onTap: isEnabled ? onPressed : null,
-//       borderRadius: BorderRadius.circular(borderRadius),
-//       child: AnimatedContainer(
-//         duration: const Duration(milliseconds: 200),
-//         padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 12),
-//         decoration: BoxDecoration(
-//           borderRadius: BorderRadius.circular(borderRadius),
-//           color: Colors.transparent,
-//           border: Border.all(
-//             width: 1.4,
-//             color: isEnabled
-//                 ? const Color(0xFF6366F1)
-//                 : Colors.white.withOpacity(.15),
-//           ),
-//         ),
-//         child: Center(
-//           child: busy
-//               ? CustomLoader.minimal()
-//               : Text(
-//                   buttonLabel ?? "",
-//                   style: TextStyle(
-//                     fontWeight: FontWeight.w600,
-//                     fontSize: 14,
-//                     color: isEnabled
-//                         ? AppColors.of(context).primaryText
-//                         : Colors.white.withOpacity(.3),
-//                   ),
-//                 ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+class CustomGradientIconButton extends StatelessWidget {
+  final Function()? onPressed;
+  final double borderRadius;
+  final Color? color;
+  final bool busy;
+  final Widget icon;
+  final Color disabledColor;
+  final String? tooltip;
 
-// /// ----------------------------------------------------------
-// /// ICON GRADIENT BUTTON (For AI Action Buttons)
-// /// ----------------------------------------------------------
-// class CustomGradientIconButton extends StatelessWidget {
-//   final Function()? onPressed;
-//   final double borderRadius;
-//   final bool busy;
-//   final Widget icon;
-//   final Color disabledColor;
-//   final String? tooltip;
+  const CustomGradientIconButton({
+    super.key,
+    this.onPressed,
+    this.borderRadius = 12.0,
+    this.color,
+    this.busy = false,
+    required this.icon,
+    this.disabledColor = const Color(0xFF212121),
+    this.tooltip,
+  });
 
-//   const CustomGradientIconButton({
-//     super.key,
-//     this.onPressed,
-//     this.borderRadius = 16.0,
-//     this.busy = false,
-//     required this.icon,
-//     this.disabledColor = const Color(0xFF1A1D21),
-//     this.tooltip,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final bool isEnabled = onPressed != null && !busy;
-
-//     return Tooltip(
-//       message: tooltip ?? '',
-//       child: InkWell(
-//         onTap: isEnabled ? onPressed : null,
-//         borderRadius: BorderRadius.circular(borderRadius),
-//         splashColor: Colors.white12,
-//         child: AnimatedContainer(
-//           duration: const Duration(milliseconds: 200),
-//           padding: const EdgeInsets.all(12),
-//           decoration: BoxDecoration(
-//             borderRadius: BorderRadius.circular(borderRadius),
-//             gradient: isEnabled
-//                 ? const LinearGradient(
-//                     colors: [
-//                       Color(0xFF6366F1),
-//                       Color(0xFF4F46E5),
-//                       Color(0xFF0EA5E9),
-//                     ],
-//                     begin: Alignment.topLeft,
-//                     end: Alignment.bottomRight,
-//                   )
-//                 : null,
-//             color: isEnabled ? null : disabledColor,
-//             boxShadow: isEnabled
-//                 ? [
-//                     BoxShadow(
-//                       color: const Color(0xFF6366F1).withOpacity(.25),
-//                       blurRadius: 10,
-//                       offset: const Offset(0, 3),
-//                     )
-//                   ]
-//                 : [],
-//           ),
-//           child: busy
-//               ? CustomLoader.minimal()
-//               : icon,
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip ?? '',
+      child: GestureDetector(
+        onTap: onPressed,
+        child: Container(
+          decoration: BoxDecoration(
+            color: onPressed == null ? disabledColor : null,
+            gradient:
+                onPressed != null
+                    ? const LinearGradient(
+                      colors: [
+                        Color(0xFF20B9F0),
+                        Color(0xFF0094FF),
+                        Color(0xFF97A1FC),
+                      ],
+                      stops: [0.0, 0.51, 1.0],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    )
+                    : null,
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          child: busy ? Center(child: CustomLoader.minimal()) : icon,
+        ),
+      ),
+    );
+  }
+}

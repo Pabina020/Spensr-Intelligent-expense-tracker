@@ -1,126 +1,221 @@
+
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:spensr/screen/home/components/custom_weekly_bar_chart.dart';
+import 'package:spensr/theme/app_colors.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
+class WeeklyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark(),
-      home: HomeView(),
-    );
-  }
-}
-
-class HomeView extends StatefulWidget {
-  @override
-  _HomeViewState createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 3, vsync: this); // 3 tabs: Daily, Weekly, Monthly
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text("Home dashboard"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
+    final colors = AppColors.of(context);
+    
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Greeting text
-            Text(
-              "Good Morning, Pabs!",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            Text("Have a good day!", style: TextStyle(fontSize: 16)),
-
-            SizedBox(height: 20),
-
-            // TabBar with Daily, Weekly, and Monthly tabs
-            TabBar(
-              controller: _tabController,
-              tabs: [
-                Tab(text: "Daily"),
-                Tab(text: "Weekly"),
-                Tab(text: "Monthly"),
-              ],
-              labelColor: Colors.blue,
-              unselectedLabelColor: Colors.grey,
-              indicatorColor: Colors.blue,
-            ),
-
-            SizedBox(height: 20),
-
-            // Expense and Income
+            // Expense and Income Cards
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Expense", style: TextStyle(fontSize: 16)),
-                    Text("\$729.00", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  ],
+                // Expense Card
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: colors.containerBG,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Expense",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: colors.disabledText,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          "\$729.00",
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Income", style: TextStyle(fontSize: 16)),
-                    Text("\$239.00", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  ],
+                SizedBox(width: 12),
+                // Income Card
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: colors.containerBG,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Income",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: colors.disabledText,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          "\$239.00",
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
 
             SizedBox(height: 20),
 
-            // Weekly View
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
+            // Date range selector
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: colors.containerBG,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
                 children: [
-                  // Daily View (Placeholder for now)
-                  Center(child: Text("Daily View")),
-                  // Weekly View
-                  WeeklyView(),
-                  // Monthly View (Placeholder for now)
-                  Center(child: Text("Monthly View")),
+                  Icon(Icons.calendar_today, size: 18, color: colors.primaryText),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      "Jun 23 - Jun 30, 2023",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: colors.primaryText,
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.keyboard_arrow_down, size: 20, color: colors.primaryText),
                 ],
               ),
             ),
 
-            // Bottom Bar with Icons
-            BottomNavigationBar(
-              items: [
-                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-                BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Chart'),
-                BottomNavigationBarItem(icon: Icon(Icons.mic), label: 'Voice'),
-                BottomNavigationBarItem(icon: Icon(Icons.report), label: 'Report'),
-                BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+            SizedBox(height: 20),
+
+            // Total for this week card
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: colors.containerBG,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Total for this week",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colors.disabledText,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    "\$224.12",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                      color: colors.primaryText,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 20),
+
+            // Chart Section - Using the CustomWeeklyBarChart
+            Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: colors.containerBG,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Optional: Add a title for the chart if needed
+                  // Text(
+                  //   "Weekly Spending",
+                  //   style: TextStyle(
+                  //     fontSize: 16,
+                  //     fontWeight: FontWeight.w600,
+                  //     color: colors.primaryText,
+                  //   ),
+                  // ),
+                  // SizedBox(height: 16),
+                  
+                  // The CustomWeeklyBarChart widget
+                  CustomWeeklyBarChart(),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 24),
+
+            // Today section
+            Text(
+              "Today",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: colors.primaryText,
+              ),
+            ),
+
+            SizedBox(height: 16),
+
+            // Today's transactions
+            Column(
+              children: [
+                // Educational Fees
+                _buildTransactionItem(
+                  icon: Icons.book,
+                  title: "Educational Fees",
+                  subtitle: "Studies",
+                  amount: "-\$298.89",
+                  amountColor: Colors.red,
+                ),
+                
+                // Food
+                _buildTransactionItem(
+                  icon: Icons.fastfood,
+                  title: "Food",
+                  subtitle: "Pizzas, momos, chowmein",
+                  amount: "-\$28.89",
+                  amountColor: Colors.red,
+                ),
+                
+                // Work
+                _buildTransactionItem(
+                  icon: Icons.work,
+                  title: "Work",
+                  subtitle: "Office",
+                  amount: "+\$1220.00",
+                  amountColor: Colors.green,
+                ),
               ],
             ),
           ],
@@ -128,76 +223,66 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       ),
     );
   }
-}
 
-class WeeklyView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Date range
-        Text("Jun 22 - Jun 30, 2025", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        SizedBox(height: 10),
-
-        // Weekly total
-        Text("Total for this week", style: TextStyle(fontSize: 18)),
-        Text("\$2344.12", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-        SizedBox(height: 20),
-
-        // Bar chart
-        BarChart(
-          BarChartData(
-            alignment: BarChartAlignment.spaceBetween,
-            maxY: 500,
-            barTouchData: BarTouchData(enabled: false),
-            titlesData: FlTitlesData(show: false),
-            borderData: FlBorderData(show: false),
-            gridData: FlGridData(show: false),
-            // barGroups: [
-            //   BarChartGroupData(x: 0, barRods: [BarChartRodData(y: 250, colors: [Colors.blue])]),
-            //   BarChartGroupData(x: 1, barRods: [BarChartRodData(y: 300, colors: [Colors.blue])]),
-            //   BarChartGroupData(x: 2, barRods: [BarChartRodData(y: 350, colors: [Colors.blue])]),
-            //   BarChartGroupData(x: 3, barRods: [BarChartRodData(y: 450, colors: [Colors.blue])]),
-            //   BarChartGroupData(x: 4, barRods: [BarChartRodData(y: 400, colors: [Colors.blue])]),
-            //   BarChartGroupData(x: 5, barRods: [BarChartRodData(y: 200, colors: [Colors.blue])]),
-            //   BarChartGroupData(x: 6, barRods: [BarChartRodData(y: 100, colors: [Colors.blue])]),
-            // ],
+  Widget _buildTransactionItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required String amount,
+    required Color amountColor,
+  }) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.03),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: Colors.white),
           ),
-        ),
-
-        SizedBox(height: 20),
-
-        // Transaction list
-        Text("Today", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        ListTile(
-          leading: Icon(Icons.book),
-          title: Text("Educational Fees"),
-          subtitle: Text("Studies"),
-          trailing: Text("-\$298.89", style: TextStyle(color: Colors.red)),
-        ),
-        Divider(),
-        ListTile(
-          leading: Icon(Icons.fastfood),
-          title: Text("Food"),
-          subtitle: Text("Pizzas, momos, chowmein"),
-          trailing: Text("-\$28.89", style: TextStyle(color: Colors.red)),
-        ),
-        Divider(),
-        ListTile(
-          leading: Icon(Icons.work),
-          title: Text("Work"),
-          subtitle: Text("Office"),
-          trailing: Text("+\$1220.00", style: TextStyle(color: Colors.green)),
-        ),
-        Divider(),
-        ListTile(
-          leading: Icon(Icons.restaurant),
-          title: Text("Restaurants"),
-          subtitle: Text("Office"),
-          trailing: Text("+\$10.00", style: TextStyle(color: Colors.green)),
-        ),
-      ],
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white70,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            amount,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: amountColor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

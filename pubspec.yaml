@@ -5,38 +5,41 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.1
+  sdk: '^3.10.0'  # Add the SDK constraint here
 
 dependencies:
   flutter:
     sdk: flutter
-  
+
   cupertino_icons: ^1.0.8
-  google_fonts: ^4.0.4
-  firebase_core: ^2.25.0
-  firebase_auth: ^4.17.0
+  google_fonts: ^6.3.3
+  firebase_core: ^4.2.1
+  firebase_auth: ^6.1.2
+  objectbox: ^5.0.4
+  objectbox_flutter_libs: ^5.0.4
+  stacked: ^3.5.0  # For state management
+  stacked_services: ^1.6.0  # For navigation and services
+  provider: ^6.1.2  # Optional: For simple state management or dependency injection
+  auto_route: ^11.0.0  # Routing
 
-  # STATE MANAGEMENT
-  provider: ^6.1.2   # ← ADD THIS HERE
-
-  # ROUTING
-  auto_route: ^7.8.4
-
-  # FL_CHART
-  fl_chart: ^1.1.1  # <- Correct indentation
+  # For charts
+  fl_chart: ^1.1.1
   
+  dio: ^5.1.0  # Add the dio package for HTTP requests
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.0
-
-  # CODE GENERATION (correct version)
-  auto_route_generator: ^7.3.2
+  flutter_lints: ^6.0.0
+  injectable_generator: ^2.7.0
+  # Code generation
+  auto_route_generator: ^10.4.0
   build_runner: ^2.4.6
+  collection: ^1.15.0
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/
+    - assets/images/  # Add your images or other assets here
